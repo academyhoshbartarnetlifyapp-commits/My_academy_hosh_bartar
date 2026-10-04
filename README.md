@@ -1,2 +1,923 @@
-# My_academy_hosh_bartar
-Momo
+```html
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>فروشگاه آنلاین Mon</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        digi: {
+                            blue: '#0284c7', // Primary blue theme
+                            dark: '#0f172a',
+                            gray: '#f8fafc',
+                            cyan: '#0ea5e9',
+                            border: '#e2e8f0'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Vazirmatn', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Vazirmatn', sans-serif; background-color: #f8fafc; }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+</head>
+<body class="bg-digi-gray text-digi-dark min-h-screen flex flex-col selection:bg-digi-blue selection:text-white">
+
+    <!-- Top Header Bar -->
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between gap-4">
+            <!-- Logo & Search -->
+            <div class="flex items-center gap-6 flex-1">
+                <a href="#" onclick="showHome()" class="flex items-center gap-2 font-black text-2xl text-digi-blue tracking-wider">
+                    <i class="fa-solid fa-bag-shopping"></i>
+                    <span>Mon</span>
+                </a>
+                <div class="relative flex-1 max-w-xl hidden md:block">
+                    <input type="text" id="searchInput" oninput="handleSearch(this.value)" placeholder="جستجو در محصولات..." class="w-full bg-digi-gray rounded-xl py-2.5 px-4 pr-11 text-sm focus:outline-none focus:ring-2 focus:ring-digi-blue/50 transition">
+                    <i class="fa-solid fa-magnifying-glass absolute right-4 top-3.5 text-gray-400"></i>
+                </div>
+            </div>
+
+            <!-- Actions: Cart, Support, Auth -->
+            <div class="flex items-center gap-3">
+                <button onclick="openSupportModal()" class="flex items-center gap-1.5 px-3 py-2 rounded-xl border border-digi-border hover:bg-gray-50 text-sm font-medium text-gray-700 transition">
+                    <i class="fa-solid fa-headset text-digi-blue"></i>
+                    <span class="hidden sm:inline">پشتیبانی</span>
+                </button>
+                <button onclick="openCartModal()" class="relative flex items-center gap-1.5 px-4 py-2 rounded-xl border border-digi-border hover:bg-gray-50 text-sm font-medium text-gray-700 transition">
+                    <i class="fa-solid fa-cart-shopping text-lg"></i>
+                    <span id="cartCountBadge" class="absolute -top-1.5 -right-1.5 bg-digi-blue text-white text-xs font-bold w-5 h-5 rounded-full flex items-center justify-center shadow">0</span>
+                    <span class="hidden sm:inline">سبد خرید</span>
+                </button>
+                <div id="userAuthArea">
+                    <button onclick="openAuthModal()" class="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-digi-blue text-white text-sm font-bold shadow hover:bg-sky-600 transition">
+                        <i class="fa-solid fa-user"></i>
+                        <span>ورود / ثبت‌نام</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- Mobile Search Bar -->
+        <div class="px-4 pb-3 md:hidden">
+            <div class="relative w-full">
+                <input type="text" oninput="handleSearch(this.value)" placeholder="جستجو در محصولات..." class="w-full bg-digi-gray rounded-xl py-2.5 px-4 pr-11 text-sm focus:outline-none focus:ring-2 focus:ring-digi-blue/50">
+                <i class="fa-solid fa-magnifying-glass absolute right-4 top-3.5 text-gray-400"></i>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="flex-1 max-w-7xl w-full mx-auto px-4 py-6">
+        <!-- Hero Banner -->
+        <div class="bg-gradient-to-l from-digi-blue to-sky-600 rounded-3xl p-6 md:p-10 text-white mb-8 shadow-lg flex flex-col md:flex-row items-center justify-between gap-6">
+            <div class="space-y-3 text-center md:text-right">
+                <span class="bg-white/20 text-xs font-semibold px-3 py-1 rounded-full uppercase tracking-wider">تضمین اصالت کالا</span>
+                <h1 class="text-2xl md:text-4xl font-black">بهترین کالاها با مناسب‌ترین قیمت در Mon</h1>
+                <p class="text-white/80 text-sm md:text-base max-w-lg">خرید آنلاین آسان، سریع و مطمئن. پرداخت امن و ارسال به سراسر کشور.</p>
+            </div>
+            <div class="bg-white/10 p-6 rounded-2xl backdrop-blur-sm border border-white/20 flex flex-col items-center justify-center text-center">
+                <i class="fa-solid fa-box text-4xl mb-2 text-white"></i>
+                <span class="font-bold text-sm">هزینه ارسال روی کالا حساب می شود</span>
+                <span class="text-xs text-white/70">ارسال مطمئن به سراسر کشور</span>
+            </div>
+        </div>
+
+        <!-- Section Title -->
+        <div class="flex items-center justify-between mb-6">
+            <div class="flex items-center gap-2">
+                <div class="w-2 h-6 bg-digi-blue rounded-full"></div>
+                <h2 class="text-lg md:text-xl font-black">محصولات فروشگاه Mon</h2>
+            </div>
+            <span id="productCount" class="text-xs text-gray-500 font-medium">0 کالا</span>
+        </div>
+
+        <!-- Products Grid -->
+        <div id="productsGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            <!-- Rendered by JS -->
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-digi-border mt-12 py-8 text-center text-sm text-gray-500">
+        <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <p>کلیه حقوق این سایت متعلق به فروشگاه Mon می‌باشد.</p>
+            <div class="flex items-center gap-4">
+                <button onclick="openSupportModal()" class="text-digi-blue font-bold hover:underline">تماس با پشتیبانی: ۰۹۳۸۴۸۶۵۷۵۱</button>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Support Modal -->
+    <div id="supportModal" class="fixed inset-0 bg-black/50 z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl transform transition-all">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="font-bold text-lg text-digi-dark">پشتیبانی مشتریان Mon</h3>
+                <button onclick="closeSupportModal()" class="text-gray-400 hover:text-gray-700 text-lg p-1"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="space-y-4 text-center py-4">
+                <div class="w-16 h-16 bg-sky-50 text-digi-blue rounded-full flex items-center justify-center text-2xl mx-auto">
+                    <i class="fa-solid fa-phone-volume"></i>
+                </div>
+                <p class="text-gray-600 text-sm">برای پیگیری سفارشات و راهنمایی می‌توانید با شماره پشتیبانی زیر تماس حاصل فرمایید:</p>
+                <div class="bg-digi-gray p-4 rounded-2xl border border-digi-border">
+                    <a href="tel:09384865751" class="text-xl font-black text-digi-blue tracking-wider">۰۹۳۸۴۸۶۵۷۵۱</a>
+                </div>
+                <button onclick="closeSupportModal()" class="w-full bg-digi-dark text-white py-3 rounded-xl font-bold hover:bg-black transition">متوجه شدم</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cart Drawer / Modal -->
+    <div id="cartModal" class="fixed inset-0 bg-black/50 z-50 hidden flex items-center justify-end">
+        <div class="bg-white w-full max-w-md h-full shadow-2xl flex flex-col transform transition-transform animate-in slide-in-from-left">
+            <div class="p-4 border-b border-digi-border flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                    <i class="fa-solid fa-cart-shopping text-digi-blue"></i>
+                    <h3 class="font-bold text-lg">سبد خرید شما</h3>
+                </div>
+                <button onclick="closeCartModal()" class="text-gray-400 hover:text-gray-700 text-lg p-2"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div id="cartItemsContainer" class="flex-1 overflow-y-auto p-4 space-y-4 divide-y divide-gray-100">
+                <!-- Cart Items Rendered Here -->
+            </div>
+            <div id="cartFooter" class="p-4 border-t border-digi-border bg-gray-50 hidden">
+                <div class="flex justify-between items-center mb-4">
+                    <span class="text-gray-600 text-sm">مجموع قابل پرداخت:</span>
+                    <span id="cartTotalPrice" class="font-black text-lg text-digi-blue">۰ تومان</span>
+                </div>
+                <button onclick="proceedToCheckout()" class="w-full bg-digi-blue text-white py-3.5 rounded-xl font-bold shadow-lg hover:bg-sky-600 transition flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-credit-card"></i>
+                    <span>ثبت سفارش و پرداخت</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Checkout Payment Modal (with Card Number & Receipt Upload) -->
+    <div id="checkoutModal" class="fixed inset-0 bg-black/50 z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center">
+                <h3 class="font-bold text-lg text-digi-dark">اطلاعات پرداخت کارت به کارت</h3>
+                <button onclick="closeCheckoutModal()" class="text-gray-400 hover:text-gray-700 text-lg"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <p class="text-gray-600 text-xs">لطفاً مبلغ فاکتور را به شماره کارت زیر واریز نموده، اطلاعات خود را وارد کرده و تصویر رسید یا کد پیگیری را ارسال کنید:</p>
+            
+            <div class="bg-digi-gray p-4 rounded-2xl border border-digi-border flex items-center justify-between">
+                <div class="font-mono font-bold text-lg tracking-widest text-digi-dark" id="bankCardNumberText">۶۲۱۹۸۶۱۸۵۲۰۸۴۲۰۰</div>
+                <button onclick="copyCardNumber()" class="bg-white text-digi-blue px-3 py-1.5 rounded-xl text-xs font-bold border border-digi-blue hover:bg-digi-blue hover:text-white transition flex items-center gap-1">
+                    <i class="fa-regular fa-copy"></i> کپی کارت
+                </button>
+            </div>
+
+            <div class="space-y-3 pt-2">
+                <label class="block text-xs font-medium text-gray-700">نام و نام خانوادگی تحویل‌گیرنده</label>
+                <input type="text" id="orderName" class="w-full bg-digi-gray rounded-xl py-2.5 px-4 text-sm focus:outline-none focus:ring-2 focus:ring-digi-blue/50" placeholder="مثال: علی رضایی">
+                
+                <label class="block text-xs font-medium text-gray-700">شماره تماس</label>
+                <input type="text" id="orderPhone" class="w-full bg-digi-gray rounded-xl py-2.5 px-4 text-sm focus:outline-none focus:ring-2 focus:ring-digi-blue/50" placeholder="مثال: 09123456789">
+
+                <label class="block text-xs font-medium text-gray-700">آدرس دقیق پستی</label>
+                <textarea id="orderAddress" rows="2" class="w-full bg-digi-gray rounded-xl p-3 text-sm focus:outline-none focus:ring-2 focus:ring-digi-blue/50" placeholder="استان، شهر، خیابان، پلاک..."></textarea>
+
+                <label class="block text-xs font-medium text-gray-700">آپلود تصویر رسید پرداخت یا وارد کردن لینک تصویر / کد پیگیری</label>
+                <div class="space-y-2">
+                    <input type="file" id="orderReceiptFile" accept="image/*" onchange="handleReceiptFileSelect(event)" class="w-full text-xs text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-digi-blue file:text-white hover:file:bg-sky-600 transition">
+                    <input type="text" id="orderReceipt" class="w-full bg-digi-gray rounded-xl py-2 px-4 text-xs font-mono focus:outline-none focus:ring-2 focus:ring-digi-blue/50" placeholder="یا لینک تصویر رسید / کد پیگیری وارد کنید...">
+                    <div id="receiptPreviewContainer" class="hidden mt-2">
+                        <img id="receiptPreviewImg" src="" class="w-20 h-20 object-cover rounded-xl border border-digi-border">
+                    </div>
+                </div>
+            </div>
+
+            <button onclick="submitFinalOrder()" class="w-full bg-emerald-600 text-white py-3.5 rounded-xl font-bold shadow hover:bg-emerald-700 transition">تایید و ثبت نهایی سفارش</button>
+        </div>
+    </div>
+
+    <!-- Auth Modal (Login / Register / Forgot Password) -->
+    <div id="authModal" class="fixed inset-0 bg-black/50 z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl">
+            <div class="flex justify-between items-center mb-4">
+                <h3 id="authModalTitle" class="font-bold text-lg text-digi-dark">ورود / ثبت‌نام</h3>
+                <button onclick="closeAuthModal()" class="text-gray-400 hover:text-gray-700 text-lg"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+
+            <!-- Login View -->
+            <div id="loginView" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-medium text-gray-700 mb-1">شماره تماس</label>
+                    <input type="text" id="loginIdentifier" class="w-full bg-digi-gray rounded-xl py-2.5 px-4 text-sm focus:outline-none focus:ring-2 focus:ring-digi-blue/50" placeholder="0912...">
+                </div>
+                <div>
+                    <label class="block text-xs font-medium text-gray-700 mb-1">رمز عبور</label>
+                    <input type="password" id="loginPassword" class="w-full bg-digi-gray rounded-xl py-2.5 px-4 text-sm focus:outline-none focus:ring-2 focus:ring-digi-blue/50" placeholder="رمز عبور">
+                </div>
+                <div class="flex items-center justify-between text-xs">
+                    <button onclick="switchAuthView('forgot')" class="text-digi-blue hover:underline">فراموشی رمز عبور؟</button>
+                    <button onclick="switchAuthView('register')" class="text-gray-600 hover:underline">حساب ندارید؟ ثبت‌نام</button>
+                </div>
+                <button onclick="handleLogin()" class="w-full bg-digi-blue text-white py-3 rounded-xl font-bold hover:bg-sky-600 transition shadow">ورود به حساب</button>
+            </div>
+
+            <!-- Register View -->
+            <div id="registerView" class="space-y-4 hidden">
+                <div>
+                    <label class="block text-xs font-medium text-gray-700 mb-1">نام و نام خانوادگی</label>
+                    <input type="text" id="regName" class="w-full bg-digi-gray rounded-xl py-2.5 px-4 text-sm focus:outline-none focus:ring-2 focus:ring-digi-blue/50">
+                </div>
+                <div>
+                    <label class="block text-xs font-medium text-gray-700 mb-1">شماره تماس</label>
+                    <input type="text" id="regPhone" class="w-full bg-digi-gray rounded-xl py-2.5 px-4 text-sm focus:outline-none focus:ring-2 focus:ring-digi-blue/50" placeholder="09xxxxxxxxx">
+                </div>
+                <div>
+                    <label class="block text-xs font-medium text-gray-700 mb-1">رمز عبور دلخواه</label>
+                    <input type="password" id="regPassword" class="w-full bg-digi-gray rounded-xl py-2.5 px-4 text-sm focus:outline-none focus:ring-2 focus:ring-digi-blue/50">
+                </div>
+                <div class="flex items-center justify-between text-xs">
+                    <button onclick="switchAuthView('login')" class="text-digi-blue hover:underline">قبلاً ثبت‌‌نام کرده‌اید؟ ورود</button>
+                </div>
+                <button onclick="handleRegister()" class="w-full bg-digi-blue text-white py-3 rounded-xl font-bold hover:bg-sky-600 transition shadow">تایید و ثبت‌نام</button>
+            </div>
+
+            <!-- Forgot Password View -->
+            <div id="forgotView" class="space-y-4 hidden">
+                <p class="text-xs text-gray-600">شماره تماس خود را وارد کنید تا درخواست بازیابی رمز عبور برای مدیریت ارسال شود:</p>
+                <div>
+                    <label class="block text-xs font-medium text-gray-700 mb-1">شماره تماس</label>
+                    <input type="text" id="forgotPhone" class="w-full bg-digi-gray rounded-xl py-2.5 px-4 text-sm focus:outline-none focus:ring-2 focus:ring-digi-blue/50" placeholder="0912...">
+                </div>
+                <div class="flex items-center justify-between text-xs">
+                    <button onclick="switchAuthView('login')" class="text-digi-blue hover:underline">بازگشت به صفحه ورود</button>
+                </div>
+                <button onclick="handleForgotSubmit()" class="w-full bg-digi-blue text-white py-3 rounded-xl font-bold hover:bg-sky-600 transition shadow">ارسال درخواست بازیابی</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin Dashboard Modal -->
+    <div id="adminPanelModal" class="fixed inset-0 bg-black/50 z-50 hidden flex items-center justify-center p-2 sm:p-4">
+        <div class="bg-white rounded-3xl max-w-5xl w-full h-[90vh] shadow-2xl flex flex-col overflow-hidden">
+            <div class="bg-digi-dark text-white p-4 flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                    <i class="fa-solid fa-shield-halved text-digi-blue text-xl"></i>
+                    <h3 class="font-bold text-lg">پنل مدیریت فروشگاه Mon</h3>
+                </div>
+                <button onclick="closeAdminPanel()" class="text-gray-400 hover:text-white text-lg p-2"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+
+            <!-- Tabs -->
+            <div class="flex border-b border-digi-border bg-gray-50 px-4 pt-2 gap-2 overflow-x-auto">
+                <button onclick="switchAdminTab('products')" id="adminTabProductsBtn" class="px-4 py-2 font-bold text-sm border-b-2 border-digi-blue text-digi-blue whitespace-nowrap">مدیریت محصولات</button>
+                <button onclick="switchAdminTab('receipts')" id="adminTabReceiptsBtn" class="px-4 py-2 font-bold text-sm border-b-2 border-transparent text-gray-500 hover:text-gray-800 flex items-center gap-1.5 whitespace-nowrap">
+                    <span>رسیدها و سفارشات</span>
+                    <span id="receiptsBadge" class="bg-digi-blue text-white text-xs px-1.5 py-0.5 rounded-full hidden">0</span>
+                </button>
+                <button onclick="switchAdminTab('requests')" id="adminTabRequestsBtn" class="px-4 py-2 font-bold text-sm border-b-2 border-transparent text-gray-500 hover:text-gray-800 flex items-center gap-1.5 whitespace-nowrap">
+                    <span>فراموشی رمزها</span>
+                    <span id="forgotRequestsBadge" class="bg-digi-blue text-white text-xs px-1.5 py-0.5 rounded-full hidden">0</span>
+                </button>
+            </div>
+
+            <!-- Tab 1: Products Management -->
+            <div id="adminTabProducts" class="flex-1 overflow-y-auto p-6 space-y-6">
+                <!-- Add Product Form -->
+                <div class="bg-digi-gray p-4 sm:p-6 rounded-2xl border border-digi-border space-y-4">
+                    <h4 class="font-bold text-sm text-digi-dark flex items-center gap-2">
+                        <i class="fa-solid fa-plus-circle text-digi-blue"></i>
+                        <span>افزودن محصول جدید</span>
+                    </h4>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        <div>
+                            <label class="block text-xs font-medium text-gray-700 mb-1">نام محصول</label>
+                            <input type="text" id="newProdName" class="w-full bg-white rounded-xl py-2 px-3 text-sm border border-digi-border focus:outline-none focus:ring-2 focus:ring-digi-blue/50" placeholder="مثال: گوشی موبایل سامسونگ">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-gray-700 mb-1">قیمت (تومان)</label>
+                            <input type="number" id="newProdPrice" class="w-full bg-white rounded-xl py-2 px-3 text-sm border border-digi-border focus:outline-none focus:ring-2 focus:ring-digi-blue/50" placeholder="مثال: 5400000">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-gray-700 mb-1">تصویر محصول (آپلود فایل یا لینک URL)</label>
+                            <input type="file" id="newProdImageFile" accept="image/*" onchange="handleProductFileSelect(event)" class="w-full text-xs text-gray-500 file:mr-2 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-digi-blue file:text-white mb-2">
+                            <input type="text" id="newProdImage" class="w-full bg-white rounded-xl py-1.5 px-3 text-xs border border-digi-border focus:outline-none focus:ring-2 focus:ring-digi-blue/50 font-mono" placeholder="https://...">
+                        </div>
+                    </div>
+                    <button onclick="addNewProduct()" class="bg-digi-blue text-white px-6 py-2.5 rounded-xl font-bold text-sm hover:bg-sky-600 transition shadow">ثبت و افزودن محصول</button>
+                </div>
+
+                <!-- Products Table -->
+                <div>
+                    <h4 class="font-bold text-sm text-digi-dark mb-3">لیست محصولات موجود</h4>
+                    <div class="overflow-x-auto border border-digi-border rounded-2xl">
+                        <table class="w-full text-right text-sm">
+                            <thead class="bg-gray-100 text-gray-700 border-b border-digi-border">
+                                <tr>
+                                    <th class="p-3">تصویر</th>
+                                    <th class="p-3">نام محصول</th>
+                                    <th class="p-3">قیمت (تومان)</th>
+                                    <th class="p-3">عملیات</th>
+                                </tr>
+                            </thead>
+                            <tbody id="adminProductsTableBody" class="divide-y divide-gray-100 bg-white">
+                                <!-- Rendered by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab 2: Receipts & Orders Management -->
+            <div id="adminTabReceipts" class="flex-1 overflow-y-auto p-6 space-y-4 hidden">
+                <div class="flex items-center justify-between">
+                    <h4 class="font-bold text-sm text-digi-dark">رسیدهای پرداخت و سفارشات ثبت شده</h4>
+                    <button onclick="clearAllReceipts()" class="text-xs text-red-500 hover:underline">پاکسازی لیست رسیدها</button>
+                </div>
+                <div id="adminReceiptsContainer" class="space-y-4">
+                    <!-- Rendered by JS -->
+                </div>
+            </div>
+
+            <!-- Tab 3: Forgot Password Requests -->
+            <div id="adminTabRequests" class="flex-1 overflow-y-auto p-6 space-y-4 hidden">
+                <div class="flex items-center justify-between">
+                    <h4 class="font-bold text-sm text-digi-dark">درخواست‌های فراموشی رمز عبور کاربران</h4>
+                    <button onclick="clearForgotRequests()" class="text-xs text-red-500 hover:underline">پاکسازی لیست</button>
+                </div>
+                <div id="forgotRequestsContainer" class="space-y-3">
+                    <!-- Rendered by JS -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Toast Message Box -->
+    <div id="toastNotification" class="fixed bottom-6 left-6 z-50 transform translate-y-32 opacity-0 transition-all duration-300 bg-digi-dark text-white px-5 py-3 rounded-2xl shadow-2xl flex items-center gap-3 text-sm">
+        <i id="toastIcon" class="fa-solid fa-circle-check text-emerald-400 text-lg"></i>
+        <span id="toastMessage">پیام سیستم</span>
+    </div>
+
+    <script>
+        let products = JSON.parse(localStorage.getItem('digi_products')) || [
+            { id: 1, name: 'گوشی موبایل اپل مدل iPhone 13', price: 38500000, image: 'https://placehold.co/300x300/f8fafc/0f172a?text=iPhone+13' },
+            { id: 2, name: 'لپ‌تاپ ۱۵ اینچی ایسوس مدل X515', price: 24200000, image: 'https://placehold.co/300x300/f8fafc/0f172a?text=Asus+Laptop' },
+            { id: 3, name: 'هدفون بی سیم شیائومی مدل Earbuds', price: 850000, image: 'https://placehold.co/300x300/f8fafc/0f172a?text=Xiaomi+Earbuds' },
+            { id: 4, name: 'ساعت هوشمند مدل Ultra Smart Watch', price: 1450000, image: 'https://placehold.co/300x300/f8fafc/0f172a?text=Smart+Watch' }
+        ];
+
+        let cart = JSON.parse(localStorage.getItem('digi_cart')) || [];
+        let users = JSON.parse(localStorage.getItem('digi_users')) || [];
+        let forgotRequests = JSON.parse(localStorage.getItem('digi_forgot')) || [];
+        let orderReceipts = JSON.parse(localStorage.getItem('digi_receipts')) || [];
+        let currentUser = JSON.parse(localStorage.getItem('digi_current_user')) || null;
+        let uploadedReceiptImageBase64 = '';
+        let uploadedProductImageBase64 = '';
+
+        // Initialize App on Load
+        window.onload = function() {
+            renderProducts(products);
+            updateCartBadge();
+            updateUserAuthUI();
+            updateForgotBadge();
+            updateReceiptsBadge();
+        };
+
+        function saveState() {
+            localStorage.setItem('digi_products', JSON.stringify(products));
+            localStorage.setItem('digi_cart', JSON.stringify(cart));
+            localStorage.setItem('digi_users', JSON.stringify(users));
+            localStorage.setItem('digi_forgot', JSON.stringify(forgotRequests));
+            localStorage.setItem('digi_receipts', JSON.stringify(orderReceipts));
+            localStorage.setItem('digi_current_user', JSON.stringify(currentUser));
+        }
+
+        function showToast(message, isError = false) {
+            const toast = document.getElementById('toastNotification');
+            const msgEl = document.getElementById('toastMessage');
+            const iconEl = document.getElementById('toastIcon');
+            
+            msgEl.textContent = message;
+            if(isError) {
+                iconEl.className = 'fa-solid fa-triangle-exclamation text-amber-400 text-lg';
+            } else {
+                iconEl.className = 'fa-solid fa-circle-check text-emerald-400 text-lg';
+            }
+
+            toast.classList.remove('translate-y-32', 'opacity-0');
+            setTimeout(() => {
+                toast.classList.add('translate-y-32', 'opacity-0');
+            }, 3500);
+        }
+
+        // Handle Receipt File Upload
+        function handleReceiptFileSelect(event) {
+            const file = event.target.files[0];
+            if(!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                uploadedReceiptImageBase64 = e.target.result;
+                document.getElementById('orderReceipt').value = uploadedReceiptImageBase64;
+                const prevContainer = document.getElementById('receiptPreviewContainer');
+                const prevImg = document.getElementById('receiptPreviewImg');
+                prevImg.src = uploadedReceiptImageBase64;
+                prevContainer.classList.remove('hidden');
+            };
+            reader.readAsDataURL(file);
+        }
+
+        // Handle Product File Upload in Admin Panel
+        function handleProductFileSelect(event) {
+            const file = event.target.files[0];
+            if(!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                uploadedProductImageBase64 = e.target.result;
+                document.getElementById('newProdImage').value = uploadedProductImageBase64;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        // Render Products Grid
+        function renderProducts(list) {
+            const grid = document.getElementById('productsGrid');
+            const countEl = document.getElementById('productCount');
+            countEl.textContent = `${list.length} کالا`;
+
+            if(list.length === 0) {
+                grid.innerHTML = `<div class="col-span-full py-16 text-center text-gray-400">محصولی یافت نشد.</div>`;
+                return;
+            }
+
+            grid.innerHTML = list.map(p => `
+                <div class="bg-white rounded-3xl p-4 border border-digi-border hover:shadow-xl transition flex flex-col justify-between group">
+                    <div>
+                        <div class="overflow-hidden rounded-2xl mb-4 bg-gray-50 relative aspect-square">
+                            <img src="${p.image}" alt="${p.name}" class="w-full h-full object-cover group-hover:scale-105 transition duration-300" onerror="this.src='https://placehold.co/300x300/f8fafc/0f172a?text=Product'">
+                        </div>
+                        <h3 class="font-bold text-sm text-digi-dark line-clamp-2 mb-2">${p.name}</h3>
+                    </div>
+                    <div class="pt-4 border-t border-gray-100 flex items-center justify-between">
+                        <div>
+                            <span class="text-xs text-gray-400 block">قیمت</span>
+                            <span class="font-black text-digi-blue text-base">${p.price.toLocaleString()} <span class="text-xs font-normal">تومان</span></span>
+                        </div>
+                        <button onclick="addToCart(${p.id})" class="bg-digi-blue/10 text-digi-blue hover:bg-digi-blue hover:text-white p-3 rounded-2xl transition">
+                            <i class="fa-solid fa-cart-plus text-lg"></i>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function handleSearch(query) {
+            const filtered = products.filter(p => p.name.toLowerCase().includes(query.toLowerCase()));
+            renderProducts(filtered);
+        }
+
+        function showHome() {
+            renderProducts(products);
+        }
+
+        // Support Modal
+        function openSupportModal() { document.getElementById('supportModal').classList.remove('hidden'); }
+        function closeSupportModal() { document.getElementById('supportModal').classList.add('hidden'); }
+
+        // Cart Management
+        function openCartModal() {
+            renderCartItems();
+            document.getElementById('cartModal').classList.remove('hidden');
+        }
+        function closeCartModal() { document.getElementById('cartModal').classList.add('hidden'); }
+
+        function addToCart(productId) {
+            const product = products.find(p => p.id === productId);
+            if(!product) return;
+            const existing = cart.find(item => item.id === productId);
+            if(existing) {
+                existing.qty += 1;
+            } else {
+                cart.push({ ...product, qty: 1 });
+            }
+            saveState();
+            updateCartBadge();
+            showToast(`محصول به سبد خرید اضافه شد`);
+        }
+
+        function updateCartBadge() {
+            const count = cart.reduce((sum, item) => sum + item.qty, 0);
+            document.getElementById('cartCountBadge').textContent = count;
+        }
+
+        function renderCartItems() {
+            const container = document.getElementById('cartItemsContainer');
+            const footer = document.getElementById('cartFooter');
+
+            if(cart.length === 0) {
+                container.innerHTML = `<div class="py-20 text-center text-gray-400"><i class="fa-solid fa-cart-shopping text-4xl mb-3 block opacity-30"></i>سبد خرید شما خالی است</div>`;
+                footer.classList.add('hidden');
+                return;
+            }
+
+            footer.classList.remove('hidden');
+            let total = 0;
+
+            container.innerHTML = cart.map(item => {
+                total += item.price * item.qty;
+                return `
+                    <div class="py-3 flex items-center justify-between gap-3">
+                        <div class="flex items-center gap-3">
+                            <img src="${item.image}" class="w-14 h-14 object-cover rounded-xl bg-gray-50" onerror="this.src='https://placehold.co/100x100'">
+                            <div>
+                                <h4 class="font-bold text-xs text-digi-dark line-clamp-1">${item.name}</h4>
+                                <span class="text-xs text-gray-500 font-medium">${item.price.toLocaleString()} تومان</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <button onclick="changeQty(${item.id}, -1)" class="w-7 h-7 bg-digi-gray rounded-lg flex items-center justify-center font-bold text-xs hover:bg-gray-200">-</button>
+                            <span class="text-sm font-bold w-5 text-center">${item.qty}</span>
+                            <button onclick="changeQty(${item.id}, 1)" class="w-7 h-7 bg-digi-gray rounded-lg flex items-center justify-center font-bold text-xs hover:bg-gray-200">+</button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            document.getElementById('cartTotalPrice').textContent = total.toLocaleString() + ' تومان';
+        }
+
+        function changeQty(id, delta) {
+            const item = cart.find(i => i.id === id);
+            if(!item) return;
+            item.qty += delta;
+            if(item.qty <= 0) {
+                cart = cart.filter(i => i.id !== id);
+            }
+            saveState();
+            updateCartBadge();
+            renderCartItems();
+        }
+
+        function proceedToCheckout() {
+            if(cart.length === 0) return;
+            closeCartModal();
+            document.getElementById('checkoutModal').classList.remove('hidden');
+        }
+        function closeCheckoutModal() { document.getElementById('checkoutModal').classList.add('hidden'); }
+
+        function copyCardNumber() {
+            const cardNum = document.getElementById('bankCardNumberText').textContent;
+            const tempInput = document.createElement('input');
+            tempInput.value = cardNum;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempInput);
+            showToast('شماره کارت با موفقیت کپی شد!');
+        }
+
+        function submitFinalOrder() {
+            const name = document.getElementById('orderName').value.trim();
+            const phone = document.getElementById('orderPhone').value.trim();
+            const address = document.getElementById('orderAddress').value.trim();
+            const receipt = document.getElementById('orderReceipt').value.trim();
+
+            if(!name || !phone || !address || (!receipt && !uploadedReceiptImageBase64)) {
+                showToast('لطفاً تمامی اطلاعات و تصویر رسید پرداخت را کامل کنید.', true);
+                return;
+            }
+
+            let finalReceiptVal = receipt || uploadedReceiptImageBase64;
+            let orderTotal = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+            
+            // Save receipt to admin panel list
+            orderReceipts.push({
+                id: Date.now(),
+                name,
+                phone,
+                address,
+                receipt: finalReceiptVal,
+                items: [...cart],
+                total: orderTotal,
+                date: new Date().toLocaleString('fa-IR')
+            });
+
+            closeCheckoutModal();
+            cart = [];
+            uploadedReceiptImageBase64 = '';
+            document.getElementById('orderReceiptFile').value = '';
+            document.getElementById('receiptPreviewContainer').classList.add('hidden');
+            saveState();
+            updateCartBadge();
+            updateReceiptsBadge();
+            showToast('سفارش و رسید پرداخت شما با موفقیت ثبت شد!');
+        }
+
+        // Auth Modals
+        function openAuthModal() {
+            document.getElementById('authModal').classList.remove('hidden');
+            switchAuthView('login');
+        }
+        function closeAuthModal() { document.getElementById('authModal').classList.add('hidden'); }
+
+        function switchAuthView(viewName) {
+            document.getElementById('loginView').classList.add('hidden');
+            document.getElementById('registerView').classList.add('hidden');
+            document.getElementById('forgotView').classList.add('hidden');
+
+            const title = document.getElementById('authModalTitle');
+            if(viewName === 'login') {
+                document.getElementById('loginView').classList.remove('hidden');
+                title.textContent = 'ورود به حساب کاربری';
+            } else if(viewName === 'register') {
+                document.getElementById('registerView').classList.remove('hidden');
+                title.textContent = 'ثبت‌نام در فروشگاه Mon';
+            } else if(viewName === 'forgot') {
+                document.getElementById('forgotView').classList.remove('hidden');
+                title.textContent = 'بازیابی رمز عبور';
+            }
+        }
+
+        function handleRegister() {
+            const name = document.getElementById('regName').value.trim();
+            const phone = document.getElementById('regPhone').value.trim();
+            const pass = document.getElementById('regPassword').value.trim();
+
+            if(!name || !phone || !pass) {
+                showToast('لطفاً تمامی فیلدها را پر کنید.', true);
+                return;
+            }
+
+            users.push({ name, phone, pass });
+            currentUser = { name, phone };
+            saveState();
+            updateUserAuthUI();
+            closeAuthModal();
+            showToast(`ثبت‌نام با موفقیت انجام شد. خوش آمدید ${name}`);
+        }
+
+        function handleLogin() {
+            const identifier = document.getElementById('loginIdentifier').value.trim();
+            const pass = document.getElementById('loginPassword').value.trim();
+
+            // Check if Admin Login
+            if(identifier === '09384865751' && pass === '120014001600') {
+                currentUser = { name: 'مدیر کل', phone: identifier };
+                saveState();
+                updateUserAuthUI();
+                closeAuthModal();
+                showToast('خوش آمدید، مدیر سیستم');
+                openAdminPanel();
+                return;
+            }
+
+            const found = users.find(u => u.phone === identifier && u.pass === pass);
+            if(found) {
+                currentUser = { name: found.name, phone: found.phone };
+                saveState();
+                updateUserAuthUI();
+                closeAuthModal();
+                showToast(`خوش آمدید، ${found.name}`);
+            } else {
+                showToast('اطلاعات ورود نامعتبر است یا کاربری یافت نشد.', true);
+            }
+        }
+
+        function handleForgotSubmit() {
+            const phone = document.getElementById('forgotPhone').value.trim();
+            if(!phone) {
+                showToast('لطفاً شماره تماس خود را وارد کنید.', true);
+                return;
+            }
+
+            forgotRequests.push({ phone, date: new Date().toLocaleDateString('fa-IR') });
+            saveState();
+            updateForgotBadge();
+            closeAuthModal();
+            showToast('درخواست بازیابی رمز برای مدیریت ارسال شد.');
+        }
+
+        function updateUserAuthUI() {
+            const area = document.getElementById('userAuthArea');
+            if(currentUser) {
+                let adminBtnHtml = '';
+                if(currentUser.phone === '09384865751') {
+                    adminBtnHtml = `<button onclick="openAdminPanel()" class="bg-digi-dark text-white px-2.5 py-1 rounded-lg text-xs font-bold mr-1">پنل مدیریت</button>`;
+                }
+                area.innerHTML = `
+                    <div class="flex items-center gap-2 bg-digi-gray px-3 py-2 rounded-xl text-sm font-bold">
+                        <i class="fa-solid fa-user-check text-emerald-600"></i>
+                        <span class="hidden sm:inline">${currentUser.name}</span>
+                        ${adminBtnHtml}
+                        <button onclick="handleLogout()" class="text-xs text-red-500 hover:underline mr-2">خروج</button>
+                    </div>
+                `;
+            } else {
+                area.innerHTML = `
+                    <button onclick="openAuthModal()" class="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-digi-blue text-white text-sm font-bold shadow hover:bg-sky-600 transition">
+                        <i class="fa-solid fa-user"></i>
+                        <span>ورود / ثبت‌‌نام</span>
+                    </button>
+                `;
+            }
+        }
+
+        function handleLogout() {
+            currentUser = null;
+            saveState();
+            updateUserAuthUI();
+            showToast('از حساب کاربری خارج شدید.');
+        }
+
+        // Admin Panel Logic
+        function openAdminPanel() {
+            document.getElementById('adminPanelModal').classList.remove('hidden');
+            renderAdminProducts();
+            renderAdminReceipts();
+            renderForgotRequests();
+        }
+        function closeAdminPanel() { document.getElementById('adminPanelModal').classList.add('hidden'); }
+
+        function switchAdminTab(tab) {
+            const prodBtn = document.getElementById('adminTabProductsBtn');
+            const recBtn = document.getElementById('adminTabReceiptsBtn');
+            const reqBtn = document.getElementById('adminTabRequestsBtn');
+
+            const prodDiv = document.getElementById('adminTabProducts');
+            const recDiv = document.getElementById('adminTabReceipts');
+            const reqDiv = document.getElementById('adminTabRequests');
+
+            prodBtn.className = 'px-4 py-2 font-bold text-sm border-b-2 border-transparent text-gray-500 hover:text-gray-800 whitespace-nowrap';
+            recBtn.className = 'px-4 py-2 font-bold text-sm border-b-2 border-transparent text-gray-500 hover:text-gray-800 flex items-center gap-1.5 whitespace-nowrap';
+            reqBtn.className = 'px-4 py-2 font-bold text-sm border-b-2 border-transparent text-gray-500 hover:text-gray-800 flex items-center gap-1.5 whitespace-nowrap';
+
+            prodDiv.classList.add('hidden');
+            recDiv.classList.add('hidden');
+            reqDiv.classList.add('hidden');
+
+            if(tab === 'products') {
+                prodBtn.className = 'px-4 py-2 font-bold text-sm border-b-2 border-digi-blue text-digi-blue whitespace-nowrap';
+                prodDiv.classList.remove('hidden');
+            } else if(tab === 'receipts') {
+                recBtn.className = 'px-4 py-2 font-bold text-sm border-b-2 border-digi-blue text-digi-blue flex items-center gap-1.5 whitespace-nowrap';
+                recDiv.classList.remove('hidden');
+            } else if(tab === 'requests') {
+                reqBtn.className = 'px-4 py-2 font-bold text-sm border-b-2 border-digi-blue text-digi-blue flex items-center gap-1.5 whitespace-nowrap';
+                reqDiv.classList.remove('hidden');
+            }
+        }
+
+        function addNewProduct() {
+            const name = document.getElementById('newProdName').value.trim();
+            const price = Number(document.getElementById('newProdPrice').value);
+            const imageInput = document.getElementById('newProdImage').value.trim();
+
+            if(!name || !price) {
+                showToast('نام و قیمت محصول الزامی است.', true);
+                return;
+            }
+
+            const finalImage = uploadedProductImageBase64 || imageInput || 'https://placehold.co/300x300/f8fafc/0f172a?text=Product';
+
+            const newProduct = {
+                id: Date.now(),
+                name,
+                price,
+                image: finalImage
+            };
+
+            products.unshift(newProduct);
+            uploadedProductImageBase64 = '';
+            document.getElementById('newProdImageFile').value = '';
+            saveState();
+            renderProducts(products);
+            renderAdminProducts();
+
+            document.getElementById('newProdName').value = '';
+            document.getElementById('newProdPrice').value = '';
+            document.getElementById('newProdImage').value = '';
+            showToast('محصول جدید با موفقیت اضافه شد!');
+        }
+
+        function renderAdminProducts() {
+            const tbody = document.getElementById('adminProductsTableBody');
+            if(products.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="4" class="p-4 text-center text-gray-400">محصولی ثبت نشده است.</td></tr>`;
+                return;
+            }
+
+            tbody.innerHTML = products.map(p => `
+                <tr class="hover:bg-gray-50 transition">
+                    <td class="p-3"><img src="${p.image}" class="w-10 h-10 object-cover rounded-lg bg-gray-100" onerror="this.src='https://placehold.co/100x100'"></td>
+                    <td class="p-3 font-medium text-digi-dark">${p.name}</td>
+                    <td class="p-3 font-bold text-digi-blue">${p.price.toLocaleString()} تومان</td>
+                    <td class="p-3">
+                        <button onclick="deleteProduct(${p.id})" class="bg-red-50 text-red-500 hover:bg-red-500 hover:text-white px-3 py-1.5 rounded-xl font-bold text-xs transition">حذف</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function deleteProduct(id) {
+            products = products.filter(p => p.id !== id);
+            saveState();
+            renderProducts(products);
+            renderAdminProducts();
+            showToast('محصول با موفقیت حذف شد.');
+        }
+
+        function renderAdminReceipts() {
+            const container = document.getElementById('adminReceiptsContainer');
+            if(orderReceipts.length === 0) {
+                container.innerHTML = `<div class="py-12 text-center text-gray-400 text-sm">هیچ رسید یا سفارشی ثبت نشده است.</div>`;
+                return;
+            }
+
+            container.innerHTML = orderReceipts.map((ord, idx) => {
+                let receiptDisplay = '';
+                if(ord.receipt.startsWith('data:image')) {
+                    receiptDisplay = `<a href="${ord.receipt}" target="_blank" class="block"><img src="${ord.receipt}" class="w-16 h-16 object-cover rounded-xl border border-gray-200 hover:opacity-80 transition" title="مشاهده تصویر رسید"></a>`;
+                } else if(ord.receipt.startsWith('http')) {
+                    receiptDisplay = `<a href="${ord.receipt}" target="_blank" class="text-digi-blue underline truncate block">مشاهده لینک تصویر</a>`;
+                } else {
+                    receiptDisplay = `<span class="font-mono text-emerald-600 font-bold">${ord.receipt}</span>`;
+                }
+
+                return `
+                    <div class="bg-digi-gray p-4 sm:p-5 rounded-2xl border border-digi-border space-y-3">
+                        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 pb-3 border-b border-gray-200">
+                            <div>
+                                <span class="font-bold text-digi-dark text-base">${ord.name}</span>
+                                <span class="text-xs text-gray-500 mr-2">(${ord.date})</span>
+                            </div>
+                            <div class="flex items-center gap-2 font-mono text-sm font-bold text-digi-blue">
+                                <span>تلفن: ${ord.phone}</span>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs text-gray-700">
+                            <div>
+                                <span class="font-bold block mb-1">آدرس پستی:</span>
+                                <p class="bg-white p-2.5 rounded-xl border border-gray-200">${ord.address}</p>
+                            </div>
+                            <div>
+                                <span class="font-bold block mb-1">تصویر رسید / کد پیگیری پرداخت:</span>
+                                <div class="bg-white p-2.5 rounded-xl border border-gray-200 flex items-center gap-3">
+                                    ${receiptDisplay}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="pt-2">
+                            <span class="font-bold text-xs text-gray-700 block mb-1.5">اقلام سفارش داده شده (${ord.total.toLocaleString()} تومان):</span>
+                            <div class="flex flex-wrap gap-2">
+                                ${ord.items.map(i => `
+                                    <span class="bg-white px-3 py-1 rounded-lg border border-gray-200 text-xs text-gray-700">
+                                        ${i.name} (×${i.qty})
+                                    </span>
+                                `).join('')}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function copyAdminText(elementId, labelName) {
+            const text = document.getElementById(elementId).textContent;
+            const tempInput = document.createElement('input');
+            tempInput.value = text;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempInput);
+            showToast(`${labelName} با موفقیت کپی شد!`);
+        }
+
+        function clearForgotRequests() {
+            forgotRequests = [];
+            saveState();
+            renderForgotRequests();
+            updateForgotBadge();
+            showToast('لیست درخواست‌ها پاکسازی شد.');
+        }
+
+        function updateForgotBadge() {
+            const badge = document.getElementById('forgotRequestsBadge');
+            if(forgotRequests.length > 0) {
+                badge.textContent = forgotRequests.length;
+                badge.classList.remove('hidden');
+            } else {
+                badge.classList.add('hidden');
+            }
+        }
+    </script>
+</body>
+</html>
+```
