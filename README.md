@@ -36,7 +36,6 @@
 </head>
 <body class="bg-digi-gray text-digi-dark min-h-screen flex flex-col selection:bg-digi-blue selection:text-white">
 
-    <!-- Top Header Bar -->
     <header class="bg-white shadow-sm sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between gap-4">
             <!-- Logo & Search -->
@@ -79,7 +78,6 @@
         </div>
     </header>
 
-    <!-- Main Content Area -->
     <main class="flex-1 max-w-7xl w-full mx-auto px-4 py-6">
         <!-- Hero Banner -->
         <div class="bg-gradient-to-l from-digi-blue to-sky-600 rounded-3xl p-6 md:p-10 text-white mb-8 shadow-lg flex flex-col md:flex-row items-center justify-between gap-6">
@@ -110,7 +108,6 @@
         </div>
     </main>
 
-    <!-- Footer -->
     <footer class="bg-white border-t border-digi-border mt-12 py-8 text-center text-sm text-gray-500">
         <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4">
             <p>کلیه حقوق این سایت متعلق به فروشگاه Mon می‌باشد.</p>
@@ -120,7 +117,6 @@
         </div>
     </footer>
 
-    <!-- Support Modal -->
     <div id="supportModal" class="fixed inset-0 bg-black/50 z-50 hidden flex items-center justify-center p-4">
         <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl transform transition-all">
             <div class="flex justify-between items-center mb-4">
@@ -140,7 +136,6 @@
         </div>
     </div>
 
-    <!-- Cart Drawer / Modal -->
     <div id="cartModal" class="fixed inset-0 bg-black/50 z-50 hidden flex items-center justify-end">
         <div class="bg-white w-full max-w-md h-full shadow-2xl flex flex-col transform transition-transform animate-in slide-in-from-left">
             <div class="p-4 border-b border-digi-border flex items-center justify-between">
@@ -166,7 +161,6 @@
         </div>
     </div>
 
-    <!-- Checkout Payment Modal (with Card Number & Receipt Upload) -->
     <div id="checkoutModal" class="fixed inset-0 bg-black/50 z-50 hidden flex items-center justify-center p-4">
         <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
             <div class="flex justify-between items-center">
@@ -192,10 +186,10 @@
                 <label class="block text-xs font-medium text-gray-700">آدرس دقیق پستی</label>
                 <textarea id="orderAddress" rows="2" class="w-full bg-digi-gray rounded-xl p-3 text-sm focus:outline-none focus:ring-2 focus:ring-digi-blue/50" placeholder="استان، شهر، خیابان، پلاک..."></textarea>
 
-                <label class="block text-xs font-medium text-gray-700">آپلود تصویر رسید پرداخت یا وارد کردن لینک تصویر / کد پیگیری</label>
+                <label class="block text-xs font-medium text-gray-700">آپلود تصویر رسید پرداخت یا وارد کردن کد پیگیری</label>
                 <div class="space-y-2">
                     <input type="file" id="orderReceiptFile" accept="image/*" onchange="handleReceiptFileSelect(event)" class="w-full text-xs text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-digi-blue file:text-white hover:file:bg-sky-600 transition">
-                    <input type="text" id="orderReceipt" class="w-full bg-digi-gray rounded-xl py-2 px-4 text-xs font-mono focus:outline-none focus:ring-2 focus:ring-digi-blue/50" placeholder="یا لینک تصویر رسید / کد پیگیری وارد کنید...">
+                    <input type="text" id="orderReceipt" class="w-full bg-digi-gray rounded-xl py-2 px-4 text-xs font-mono focus:outline-none focus:ring-2 focus:ring-digi-blue/50" placeholder="یا کد پیگیری وارد کنید...">
                     <div id="receiptPreviewContainer" class="hidden mt-2">
                         <img id="receiptPreviewImg" src="" class="w-20 h-20 object-cover rounded-xl border border-digi-border">
                     </div>
@@ -206,7 +200,6 @@
         </div>
     </div>
 
-    <!-- Auth Modal (Login / Register / Forgot Password) -->
     <div id="authModal" class="fixed inset-0 bg-black/50 z-50 hidden flex items-center justify-center p-4">
         <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl">
             <div class="flex justify-between items-center mb-4">
@@ -246,7 +239,7 @@
                     <input type="password" id="regPassword" class="w-full bg-digi-gray rounded-xl py-2.5 px-4 text-sm focus:outline-none focus:ring-2 focus:ring-digi-blue/50">
                 </div>
                 <div class="flex items-center justify-between text-xs">
-                    <button onclick="switchAuthView('login')" class="text-digi-blue hover:underline">قبلاً ثبت‌‌نام کرده‌اید؟ ورود</button>
+                    <button onclick="switchAuthView('login')" class="text-digi-blue hover:underline">قبلاً ثبتنام کرده‌اید؟ ورود</button>
                 </div>
                 <button onclick="handleRegister()" class="w-full bg-digi-blue text-white py-3 rounded-xl font-bold hover:bg-sky-600 transition shadow">تایید و ثبت‌نام</button>
             </div>
@@ -266,7 +259,6 @@
         </div>
     </div>
 
-    <!-- Admin Dashboard Modal -->
     <div id="adminPanelModal" class="fixed inset-0 bg-black/50 z-50 hidden flex items-center justify-center p-2 sm:p-4">
         <div class="bg-white rounded-3xl max-w-5xl w-full h-[90vh] shadow-2xl flex flex-col overflow-hidden">
             <div class="bg-digi-dark text-white p-4 flex items-center justify-between">
@@ -296,7 +288,7 @@
                 <div class="bg-digi-gray p-4 sm:p-6 rounded-2xl border border-digi-border space-y-4">
                     <h4 class="font-bold text-sm text-digi-dark flex items-center gap-2">
                         <i class="fa-solid fa-plus-circle text-digi-blue"></i>
-                        <span>افزودن محصول جدید</span>
+                        <span>افزودن محصول جدید با تصویر</span>
                     </h4>
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                         <div>
@@ -361,7 +353,6 @@
         </div>
     </div>
 
-    <!-- Notification Toast Message Box -->
     <div id="toastNotification" class="fixed bottom-6 left-6 z-50 transform translate-y-32 opacity-0 transition-all duration-300 bg-digi-dark text-white px-5 py-3 rounded-2xl shadow-2xl flex items-center gap-3 text-sm">
         <i id="toastIcon" class="fa-solid fa-circle-check text-emerald-400 text-lg"></i>
         <span id="toastMessage">پیام سیستم</span>
@@ -724,7 +715,7 @@
                 area.innerHTML = `
                     <button onclick="openAuthModal()" class="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-digi-blue text-white text-sm font-bold shadow hover:bg-sky-600 transition">
                         <i class="fa-solid fa-user"></i>
-                        <span>ورود / ثبت‌‌نام</span>
+                        <span>ورود / ثبت‌‌‌‌نام</span>
                     </button>
                 `;
             }
@@ -887,6 +878,44 @@
                     </div>
                 `;
             }).join('');
+        }
+
+        function clearAllReceipts() {
+            orderReceipts = [];
+            saveState();
+            renderAdminReceipts();
+            updateReceiptsBadge();
+            showToast('لیست رسیدها پاکسازی شد.');
+        }
+
+        function updateReceiptsBadge() {
+            const badge = document.getElementById('receiptsBadge');
+            if(orderReceipts.length > 0) {
+                badge.textContent = orderReceipts.length;
+                badge.classList.remove('hidden');
+            } else {
+                badge.classList.add('hidden');
+            }
+        }
+
+        function renderForgotRequests() {
+            const container = document.getElementById('forgotRequestsContainer');
+            if(forgotRequests.length === 0) {
+                container.innerHTML = `<div class="py-12 text-center text-gray-400 text-sm">هیچ درخواست فراموشی رمز عبوری ثبت نشده است.</div>`;
+                return;
+            }
+
+            container.innerHTML = forgotRequests.map((req, idx) => `
+                <div class="bg-digi-gray p-4 rounded-2xl border border-digi-border flex items-center justify-between">
+                    <div>
+                        <span class="text-xs text-gray-500 block mb-1">تاریخ درخواست: ${req.date}</span>
+                        <span class="font-mono font-bold text-digi-dark text-base" id="reqPhone-${idx}">${req.phone}</span>
+                    </div>
+                    <button onclick="copyAdminText('reqPhone-${idx}', 'شماره تماس')" class="bg-digi-blue text-white px-3.5 py-2 rounded-xl text-xs font-bold hover:bg-sky-600 transition flex items-center gap-1.5 shadow">
+                        <i class="fa-regular fa-copy"></i> کپی شماره
+                    </button>
+                </div>
+            `).join('');
         }
 
         function copyAdminText(elementId, labelName) {
