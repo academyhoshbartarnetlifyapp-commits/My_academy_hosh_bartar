@@ -269,6 +269,10 @@ body { font-family: 'Vazirmatn', sans-serif; background-color: #f8fafc; }
 <!-- Tabs -->
 <div class="flex border-b border-digi-border bg-gray-50 px-4 pt-2 gap-2 overflow-x-auto">
 <button onclick="switchAdminTab('products')" id="adminTabProductsBtn" class="px-4 py-2 font-bold text-sm border-b-2 border-digi-blue text-digi-blue whitespace-nowrap">مدیریت محصولات</button>
+<button onclick="switchAdminTab('users')" id="adminTabUsersBtn" class="px-4 py-2 font-bold text-sm border-b-2 border-transparent text-gray-500 hover:text-gray-800 flex items-center gap-1.5 whitespace-nowrap">
+<span>کاربران عضو شده</span>
+<span id="usersBadge" class="bg-digi-blue text-white text-xs px-1.5 py-0.5 rounded-full hidden">0</span>
+</button>
 <button onclick="switchAdminTab('receipts')" id="adminTabReceiptsBtn" class="px-4 py-2 font-bold text-sm border-b-2 border-transparent text-gray-500 hover:text-gray-800 flex items-center gap-1.5 whitespace-nowrap">
 <span>رسیدها و سفارشات</span>
 <span id="receiptsBadge" class="bg-digi-blue text-white text-xs px-1.5 py-0.5 rounded-full hidden">0</span>
@@ -324,7 +328,18 @@ body { font-family: 'Vazirmatn', sans-serif; background-color: #f8fafc; }
 </div>
 </div>
 
-<!-- Tab 2: Receipts & Orders Management -->
+<!-- Tab 2: Registered Users Management -->
+<div id="adminTabUsers" class="flex-1 overflow-y-auto p-6 space-y-4 hidden">
+<div class="flex items-center justify-between">
+<h4 class="font-bold text-sm text-digi-dark">لیست کاربران عضو شده در سایت</h4>
+<button onclick="clearAllUsers()" class="text-xs text-red-500 hover:underline">پاکسازی لیست کاربران</button>
+</div>
+<div id="adminUsersContainer" class="space-y-3">
+<!-- Rendered by JS -->
+</div>
+</div>
+
+<!-- Tab 3: Receipts & Orders Management -->
 <div id="adminTabReceipts" class="flex-1 overflow-y-auto p-6 space-y-4 hidden">
 <div class="flex items-center justify-between">
 <h4 class="font-bold text-sm text-digi-dark">رسیدهای پرداخت و سفارشات ثبت شده</h4>
@@ -335,7 +350,7 @@ body { font-family: 'Vazirmatn', sans-serif; background-color: #f8fafc; }
 </div>
 </div>
 
-<!-- Tab 3: Forgot Password Requests -->
+<!-- Tab 4: Forgot Password Requests -->
 <div id="adminTabRequests" class="flex-1 overflow-y-auto p-6 space-y-4 hidden">
 <div class="flex items-center justify-between">
 <h4 class="font-bold text-sm text-digi-dark">درخواست‌های فراموشی رمز عبور کاربران</h4>
@@ -375,6 +390,7 @@ updateCartBadge();
 updateUserAuthUI();
 updateForgotBadge();
 updateReceiptsBadge();
+updateUsersBadge();
 };
 
 function saveState() {
@@ -638,6 +654,7 @@ users.push({ name, phone, pass });
 currentUser = { name, phone };
 saveState();
 updateUserAuthUI();
+updateUsersBadge();
 closeAuthModal();
 showToast('ثبت‌نام با موفقیت انجام شد. خوش آمدید ' + name);
 }
@@ -717,6 +734,7 @@ showToast('از حساب کاربری خارج شدید.');
 function openAdminPanel() {
 document.getElementById('adminPanelModal').classList.remove('hidden');
 renderAdminProducts();
+renderAdminUsers();
 renderAdminReceipts();
 renderForgotRequests();
 }
@@ -724,24 +742,31 @@ function closeAdminPanel() { document.getElementById('adminPanelModal').classLis
 
 function switchAdminTab(tab) {
 const prodBtn = document.getElementById('adminTabProductsBtn');
+const usersBtn = document.getElementById('adminTabUsersBtn');
 const recBtn = document.getElementById('adminTabReceiptsBtn');
 const reqBtn = document.getElementById('adminTabRequestsBtn');
 
 const prodDiv = document.getElementById('adminTabProducts');
+const usersDiv = document.getElementById('adminTabUsers');
 const recDiv = document.getElementById('adminTabReceipts');
 const reqDiv = document.getElementById('adminTabRequests');
 
 prodBtn.className = 'px-4 py-2 font-bold text-sm border-b-2 border-transparent text-gray-500 hover:text-gray-800 whitespace-nowrap';
+usersBtn.className = 'px-4 py-2 font-bold text-sm border-b-2 border-transparent text-gray-500 hover:text-gray-800 flex items-center gap-1.5 whitespace-nowrap';
 recBtn.className = 'px-4 py-2 font-bold text-sm border-b-2 border-transparent text-gray-500 hover:text-gray-800 flex items-center gap-1.5 whitespace-nowrap';
 reqBtn.className = 'px-4 py-2 font-bold text-sm border-b-2 border-transparent text-gray-500 hover:text-gray-800 flex items-center gap-1.5 whitespace-nowrap';
 
 prodDiv.classList.add('hidden');
+usersDiv.classList.add('hidden');
 recDiv.classList.add('hidden');
 reqDiv.classList.add('hidden');
 
 if(tab === 'products') {
 prodBtn.className = 'px-4 py-2 font-bold text-sm border-b-2 border-digi-blue text-digi-blue whitespace-nowrap';
 prodDiv.classList.remove('hidden');
+} else if(tab === 'users') {
+usersBtn.className = 'px-4 py-2 font-bold text-sm border-b-2 border-digi-blue text-digi-blue flex items-center gap-1.5 whitespace-nowrap';
+usersDiv.classList.remove('hidden');
 } else if(tab === 'receipts') {
 recBtn.className = 'px-4 py-2 font-bold text-sm border-b-2 border-digi-blue text-digi-blue flex items-center gap-1.5 whitespace-nowrap';
 recDiv.classList.remove('hidden');
@@ -808,6 +833,55 @@ saveState();
 renderProducts(products);
 renderAdminProducts();
 showToast('محصول با موفقیت حذف شد.');
+}
+
+function renderAdminUsers() {
+const container = document.getElementById('adminUsersContainer');
+if(users.length === 0) {
+container.innerHTML = '<div class="py-12 text-center text-gray-400 text-sm">هنوز هیچ کاربری در سایت ثبت‌‌نام نکرده است.</div>';
+return;
+}
+
+container.innerHTML = users.map((u, idx) => `
+<div class="bg-digi-gray p-4 rounded-2xl border border-digi-border flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+<div>
+<span class="font-bold text-digi-dark text-base block mb-1">${u.name}</span>
+<span class="font-mono text-xs text-gray-600 block" id="userPhone-${idx}">شماره تماس: ${u.phone}</span>
+</div>
+<div class="flex items-center gap-2">
+<button onclick="copyAdminText('userPhone-${idx}', 'شماره تماس')" class="bg-digi-blue text-white px-3.5 py-2 rounded-xl text-xs font-bold hover:bg-sky-600 transition flex items-center gap-1.5 shadow">
+<i class="fa-regular fa-copy"></i> کپی شماره
+</button>
+<button onclick="deleteUser(${idx})" class="bg-red-50 text-red-500 hover:bg-red-500 hover:text-white px-3 py-2 rounded-xl text-xs font-bold transition">حذف</button>
+</div>
+</div>
+`).join('');
+}
+
+function deleteUser(index) {
+users.splice(index, 1);
+saveState();
+renderAdminUsers();
+updateUsersBadge();
+showToast('کاربر با موفقیت حذف شد.');
+}
+
+function clearAllUsers() {
+users = [];
+saveState();
+renderAdminUsers();
+updateUsersBadge();
+showToast('لیست کاربران پاکسازی شد.');
+}
+
+function updateUsersBadge() {
+const badge = document.getElementById('usersBadge');
+if(users.length > 0) {
+badge.textContent = users.length;
+badge.classList.remove('hidden');
+} else {
+badge.classList.add('hidden');
+}
 }
 
 function renderAdminReceipts() {
@@ -900,7 +974,7 @@ container.innerHTML = forgotRequests.map((req, idx) => `
 }
 
 function copyAdminText(elementId, labelName) {
-const text = document.getElementById(elementId).textContent;
+const text = document.getElementById(elementId).textContent.replace('شماره تماس: ', '').trim();
 const tempInput = document.createElement('input');
 tempInput.value = text;
 document.body.appendChild(tempInput);
